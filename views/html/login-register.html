@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<head>
+		<script src="js/md5.js"></script>
+          <!-- CSS -->
+        <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
+        <link rel="stylesheet" href="stylesheets/bootstrap.min.css">
+        <link rel="stylesheet" href="stylesheets/font-awesome.min.css">
+        <link rel="stylesheet" href="stylesheets/form-elements.css">
+        <link rel="stylesheet" href="stylesheets/style.css">
+
+
+        <link rel="shortcut icon" href="ico/favicon.png">
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="ico/apple-touch-icon-144-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="ico/apple-touch-icon-114-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="ico/apple-touch-icon-72-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" href="ico/apple-touch-icon-57-precomposed.png">
+</head>
+
+<body>
+           <div class="top-content">
+          
+            <div class="inner-bg">
+                <div class="container">
+                  
+                    <div class="row">
+                        <div class="col-sm-8 col-sm-offset-2 text">
+                            <h1>Tuta Login & Register Forms</h1>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-sm-5">
+                          
+                          <div class="form-box">
+                            <div class="form-top">
+                              <div class="form-top-left">
+                                <h3>Login to our site</h3>
+                                  <p>Enter email and password to log on:</p>
+                              </div>
+                              <div class="form-top-right">
+                                <i class="fa fa-key"></i>
+                              </div>
+                              </div>
+                              <div class="form-bottom">
+                            <form role="form" action="javascript: verify_login();" method="post" class="form-signin">
+
+                              <div class="form-group">
+
+                                <label class="sr-only" for="inputEmailLogin">Email Address</label>
+                                  
+                                  <input type="email" id="inputEmailLogin" placeholder="UWC Email address..." required class="form-username form-control">
+
+                                </div>
+
+                                <div class="form-group">
+                                  <label class="sr-only" for="inputPasswordLogin">Password</label>
+
+                                  <input type="password" placeholder="Password..." required class="form-password form-control" id="inputPasswordLogin">
+
+                                </div>
+                                        <div class="checkbox">
+                                            <label>
+                                                <input id="status_box_login" type="checkbox" value="tutor"> Login as Tutor
+                                            </label>
+                                        </div>
+
+                                <button id="signin" type="submit" class="btn">Sign in!</button>
+								<a href="#">Forgot Password?</a>
+                            </form>
+                          </div>
+                        </div>
+                          
+                        </div>
+                        
+                        <div class="col-sm-1 middle-border"></div>
+                        <div class="col-sm-1"></div>
+                          
+                        <div class="col-sm-5">
+                          
+                          <div class="form-box">
+                            <div class="form-top">
+                              <div class="form-top-left">
+                                <h3>Sign up now</h3>
+                                  <p>Fill in the form below to get instant access:</p>
+                              </div>
+                              <div class="form-top-right">
+                                <i class="fa fa-pencil"></i>
+                              </div>
+                              </div>
+                              <div class="form-bottom">
+                                    <!-- changed class! -->
+                            <form role="form" action="javascript: verify_register();" method="post" class="form-signin">
+
+                              <div class="form-group">
+                                <label class="sr-only" for="inputName">Full Name</label>
+
+                                  <input type="name" id="inputName" placeholder="Full Name..." required class="form-control">
+                                </div>
+
+                                <div class="form-group">
+                                  <label class="sr-only" for="inputEmailRegister">Email Address</label>
+
+                                  <input type="email" 
+                                            placeholder="UWC Email Address..." required class="form-control" id="inputEmailRegister">
+                                </div>
+
+                                <div class="form-group">
+
+                                  <label class="sr-only" for="inputPasswordRegister">Password</label>
+
+                                  <input type="password" name="form-email" 
+                                            placeholder="Password..." required class="form-password form-control" id="inputPasswordRegister">
+
+                                </div>
+                                <div class="form-group">
+                                  <label class="sr-only" for="inputPassRepeat">Repeat Password
+                                            </label>
+
+                                  <input type="password" id="inputPassRepeat" placeholder="Repeat Password..." required class="form-password form-control"></input>
+                                  
+                                </div>
+                                        <div class="checkbox">
+                                    <label>
+                                        <input id="status_box_register" type="checkbox" value="tutor"> Register as Tutor
+                                        </label>
+                                    </div>
+                                <button id="signup" type="submit" class="btn">Sign me up!</button>
+                            </form>
+
+                          </div>
+                          </div>
+                          
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            
+        </div>
+
+        <!-- Javascript -->
+        <script src="js/jquery-1.11.1.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/scripts.js"></script>
+
+      <script>
+      	var verify_login = function (){ //login
+			var state = ($('#status_box_login')[0].checked)?'Tutor':'Student';
+            $.ajax({
+                url: 'php_utils/verify.php?'+state+'_Email=' + encodeURIComponent($('#inputEmailLogin').val()) + 
+                    '&status=' + state + 
+                    '&'+state+'_Password=' + md5($('#inputPasswordLogin').val()),
+                success: function (output) {
+                    window.location.href = 'user_homepage.php?user='+ state + '.' + output +'#home';
+                },
+                error: function (){
+					var fade_speed = 600;
+					$('#signin').css('opacity',0);
+					setTimeout(function(){
+							$('#signin').text('Wrong Email/Password or You Are a Tutor');
+					}, 500);
+					for(var i = 0; i< 1; i+=0.01){
+						setTimeout(function(){$('#signin').css('opacity',i);}, fade_speed);
+					}
+					setTimeout(function(){
+						$('#signin').css('opacity',0);
+						setTimeout(function(){
+							$('#signin').text('Sign in!');
+						}, 500);
+						for(var i = 0; i< 1; i+=0.01){
+							setTimeout(function(){$('#signin').css('opacity',i);}, fade_speed);
+						}
+					},3000);
+                }
+            });
+        }
+
+        var verify_register = function(){ // register
+			if( $('#inputPasswordRegister').val() != $('#inputPassRepeat').val() ){
+				var fade_speed = 600;
+				$('#signup').css('opacity',0);
+				setTimeout(function(){
+						$('#signup').text('Passwords Do Not Match');
+				}, 500);
+				for(var i = 0; i< 1; i+=0.01){
+					setTimeout(function(){$('#signup').css('opacity',i);}, fade_speed);
+				}
+				setTimeout(function(){
+					$('#signup').css('opacity',0);
+					setTimeout(function(){
+						$('#signup').text('Sign me up!');
+					}, 500);
+					for(var i = 0; i< 1; i+=0.01){
+						setTimeout(function(){$('#signup').css('opacity',i);}, fade_speed);
+					}
+				},3000);
+			}else{
+				var state = ($('#status_box_register')[0].checked)?'Tutor':'Student';
+				$.ajax({
+					url: 'php_utils/insert_into.php?'+state+'_Name=' + encodeURIComponent($('#inputName').val()) + 
+						'&'+state+'_Email=' + encodeURIComponent($('#inputEmailRegister').val()) + 
+						'&table=' + state + 
+						'&'+state+'_Password=' + md5($('#inputPasswordRegister').val()),
+					success: function (output) {
+                    	window.location.href = 'user_homepage.php?user='+ state + '.' + output +'#home';
+					},
+					error: function (){
+						$("#signup").text("Something went wrong...");
+					}
+				});
+			}
+    	}
+    
+      </script>
+</body>
